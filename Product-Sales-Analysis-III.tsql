@@ -1,0 +1,10 @@
+1SELECT product_id,year AS 'first_year',quantity,price
+2FROM (
+3    SELECT *,
+4           RANK() OVER (
+5               PARTITION BY product_id
+6               ORDER BY year
+7           ) AS rn
+8    FROM Sales
+9) Tb
+10WHERE rn = 1;
