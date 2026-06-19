@@ -1,0 +1,7 @@
+1SELECT MAX(num) AS num
+2FROM (
+3    SELECT num
+4    FROM MyNumbers
+5    GROUP BY num
+6    HAVING COUNT(*) = 1
+7) Tb;
