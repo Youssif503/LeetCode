@@ -1,0 +1,5 @@
+1/* Write your T-SQL query statement below */
+2SELECT customer_id
+3FROM Customer 
+4GROUP BY customer_id
+5HAVING COUNT(DISTINCT product_key) >= (SELECT COUNT(product_key) FROM Product)
