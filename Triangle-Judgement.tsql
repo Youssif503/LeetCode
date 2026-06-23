@@ -1,0 +1,12 @@
+1SELECT
+2    x,
+3    y,
+4    z,
+5    CASE
+6        WHEN x + y > z
+7         AND x + z > y
+8         AND y + z > x
+9        THEN 'Yes'
+10        ELSE 'No'
+11    END AS triangle
+12FROM Triangle;
