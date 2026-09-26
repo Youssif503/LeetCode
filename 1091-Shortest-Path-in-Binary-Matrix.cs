@@ -1,40 +1,83 @@
-bool[][] visit = new bool[n][];
-int[][] parent = new int[n][];
-
-for (int i = 0; i < n; i++)
+public class Solution
 {
-    visit[i] = new bool[n];
-    parent[i] = new int[n];
-}
-
-Queue<(int x, int y)> q = new();
-
-q.Enqueue((0, 0));
-visit[0][0] = true;
-parent[0][0] = 1;
-
-while (q.Count > 0)
-{
-    var (x, y) = q.Dequeue();
-
-    if (x == n - 1 && y == n - 1)
-        return parent[x][y];
-
-    for (int i = 0; i < 8; i++)
+    private readonly int[] dx =
     {
-        int newx = dx[i] + x;
-        int newy = dy[i] + y;
+        -1, -1, -1,
+         0,  0,
+         1,  1,  1
+    };
 
-        if (IsValid(newx, newy, n, n)
-            && !visit[newx][newy]
-            && grid[newx][newy] == 0)
+    private readonly int[] dy =
+    {
+        -1,  0,  1,
+        -1,  1,
+        -1,  0,  1
+    };
+
+    private bool IsValid(int x, int y, int n)
+    {
+        return x >= 0 &&
+               x < n &&
+               y >= 0 &&
+               y < n;
+    }
+
+    public int ShortestPathBinaryMatrix(int[][] grid)
+    {
+        int n = grid.Length;
+
+        // Start or destination is blocked
+        if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1)
+            return -1;
+
+        bool[][] visited = new bool[n][];
+        int[][] distance = new int[n][];
+
+        for (int i = 0; i < n; i++)
         {
-            q.Enqueue((newx, newy));
-
-            visit[newx][newy] = true;
-
-            parent[newx][newy] =
-                parent[x][y] + 1;
+            visited[i] = new bool[n];
+            distance[i] = new int[n];
         }
+
+        Queue<(int x, int y)> queue = new();
+
+        queue.Enqueue((0, 0));
+
+        visited[0][0] = true;
+        distance[0][0] = 1;
+
+        while (queue.Count > 0)
+        {
+            var (x, y) = queue.Dequeue();
+
+            // We reached the destination
+            if (x == n - 1 && y == n - 1)
+                return distance[x][y];
+
+            // Try all 8 directions
+            for (int i = 0; i < 8; i++)
+            {
+                int newX = x + dx[i];
+                int newY = y + dy[i];
+
+                if (!IsValid(newX, newY, n))
+                    continue;
+
+                if (grid[newX][newY] == 1)
+                    continue;
+
+                if (visited[newX][newY])
+                    continue;
+
+                visited[newX][newY] = true;
+
+                distance[newX][newY] =
+                    distance[x][y] + 1;
+
+                queue.Enqueue((newX, newY));
+            }
+        }
+
+        return -1;
     }
 }
